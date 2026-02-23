@@ -37,26 +37,26 @@ import Link from "next/link";
 import { toast } from "sonner";
 
 export default function AdminDashboardPage() {
-    const currentUser = useAppStore((s) => s.currentUser);
-    const students = useAppStore((s) => s.students);
-    const classes = useAppStore((s) => s.classes);
-    const subjects = useAppStore((s) => s.subjects);
-    const users = useAppStore((s) => s.users);
-    const attendanceRecords = useAppStore((s) => s.attendanceRecords);
-    const leaveRequests = useAppStore((s) => s.leaveRequests);
-    const schedules = useAppStore((s) => s.schedules);
+    const currentUser = useAppStore((s: any) => s.currentUser);
+    const students = useAppStore((s: any) => s.students);
+    const classes = useAppStore((s: any) => s.classes);
+    const subjects = useAppStore((s: any) => s.subjects);
+    const users = useAppStore((s: any) => s.users);
+    const attendanceRecords = useAppStore((s: any) => s.attendanceRecords);
+    const leaveRequests = useAppStore((s: any) => s.leaveRequests);
+    const schedules = useAppStore((s: any) => s.schedules);
 
     if (!currentUser) return null;
 
-    const teacherCount = users.filter((u) => u.role === "GURU").length;
+    const teacherCount = users.filter((u: any) => u.role === "GURU").length;
 
     // Attendance summary
     const today = new Date().toISOString().split("T")[0];
-    const todayRecords = attendanceRecords.filter((a) => a.date === today);
-    const statusCount = (status: string) => todayRecords.filter((a) => a.status === status).length;
+    const todayRecords = attendanceRecords.filter((a: any) => a.date === today);
+    const statusCount = (status: string) => todayRecords.filter((a: any) => a.status === status).length;
 
     // Pending Permissions
-    const pendingPermissions = leaveRequests.filter(req => req.status === "PENDING");
+    const pendingPermissions = leaveRequests.filter((req: any) => req.status === "PENDING");
 
     // WA Status (Mock)
     const waStatus = "connected"; // or 'disconnected'
@@ -64,13 +64,13 @@ export default function AdminDashboardPage() {
     // Classes without attendance (Mock logic - in real app would compare current time vs schedule time)
     // For now, let's find schedules for TODAY that don't have attendance records
     const todayDayOfWeek = new Date().getDay(); // 0-6
-    const todaySchedules = schedules.filter(s => s.dayOfWeek === todayDayOfWeek);
+    const todaySchedules = schedules.filter((s: any) => s.dayOfWeek === todayDayOfWeek);
 
     // Group attendance by scheduleId
-    const attendanceBySchedule = new Set(todayRecords.map(r => r.scheduleId));
+    const attendanceBySchedule = new Set(todayRecords.map((r: any) => r.scheduleId));
 
     // Schedules that missed attendance
-    const missedAttendanceClasses = todaySchedules.filter(s => !attendanceBySchedule.has(s.id));
+    const missedAttendanceClasses = todaySchedules.filter((s: any) => !attendanceBySchedule.has(s.id));
 
     // Chart Data (Mock trend for last 5 days)
     const chartData = [
@@ -262,7 +262,7 @@ export default function AdminDashboardPage() {
                         <CardContent className="p-0">
                             {missedAttendanceClasses.length > 0 ? (
                                 <div className="divide-y divide-slate-100 max-h-[300px] overflow-y-auto">
-                                    {missedAttendanceClasses.map((s, i) => (
+                                    {missedAttendanceClasses.map((s: any, i: number) => (
                                         <div key={i} className="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
                                             <div>
                                                 <p className="font-bold text-slate-800 text-sm">{s.className}</p>
